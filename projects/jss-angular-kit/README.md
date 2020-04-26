@@ -91,8 +91,10 @@ More specifically:
 
 To further illustrate the aformentioned points, here are some examples of input before and after data processing:
 
-#### Sample GraphQL
-**Before**
+<br>
+
+#### Sample GraphQL:
+##### Before
 ```
 [
     {
@@ -111,7 +113,7 @@ To further illustrate the aformentioned points, here are some examples of input 
 ]
 ```
 
-**After**
+##### After
 ```
 [
     {
@@ -131,8 +133,8 @@ To further illustrate the aformentioned points, here are some examples of input 
 
 <br>
 
-#### Sample JSS
-**Before**
+#### Sample JSS:
+##### Before
 ```
 {
     "id": "15538538-d279-4357-a819-37333e5bb293",
@@ -171,7 +173,7 @@ To further illustrate the aformentioned points, here are some examples of input 
 }
 ```
 
-**After**
+##### After
 ```
 {
     id: '15538538-d279-4357-a819-37333e5bb293',
