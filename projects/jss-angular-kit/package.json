@@ -1,10 +1,14 @@
 {
     "name": "@xcentium/jss-angular-kit",
-    "version": "0.0.3",
+    "version": "0.0.5",
     "description": "A collection of helper classes and types for working with Sitecore JSS on an Angular project.",
     "homepage": "https://github.com/XCentium/jss-angular-kit/tree/master/projects/jss-angular-kit",
     "repository": "https://github.com/XCentium/jss-angular-kit/tree/master/projects/jss-angular-kit",
-    "keywords": ["sitecore", "jss", "angular"],
+    "keywords": [
+        "sitecore",
+        "jss",
+        "angular"
+    ],
     "scripts": {
         "build": "cd ../.. && npm run build-angular",
         "pack": "cd ../../dist/jss-angular-kit && npm pack"

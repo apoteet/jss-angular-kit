@@ -20,14 +20,17 @@ npm i path/to/tgz
 <br>
 
 ## Publishing
-Within the library directory, run `npm run build`. Now you can git commit your changes and publish to the npm registry:
+Within the library directory, run the following:
 
 ```
-git add . --all
-git commit -m "some message here"
 npm version [semver]
-npm publish
-git push
+npm run build
 ```
 
-... note that `[semver]` should be replaced with either `major`, `minor`, or `patch`. See [NPM - About Semantic Versioning](https://docs.npmjs.com/about-semantic-versioning) for more information.
+... where `[semver]` should be replaced with either `major`, `minor`, or `patch`. See [NPM - About Semantic Versioning](https://docs.npmjs.com/about-semantic-versioning) for more information.
+
+Next, **navigate to the dist folder** (e.g. `dist/jss-angular-kit`) to publish the package:
+
+```
+npm publish
+```
