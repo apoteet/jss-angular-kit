@@ -1,12 +1,16 @@
 # JSS Angular Kit
-This project contains helper functions and interfaces to assist with Sitecore JSS-related front-end development.
+A collection of helper functions and TypeScript interfaces to assist with Angular projects that use Sitecore JSS.
+
+<br>
 
 ## Installation
 1) Run `npm i @xcentium/jss-angular-kit`.
-2) Inside of your root app component (named `app.component.ts` by default), initialize the Sitecore Data Service like so:
+2) Inside of your root app component (which is named `app.component.ts` by default), initialize the Sitecore Data Service like so:
 
 ```
 import { SitecoreDataService } from '@xcentium/jss-angular-kit';
+import { JssGraphQLService } from '../path/to/jss-graphql.service';
+import * as jssConfig from '../path/to/scjssconfig.json';
 
 export class MyAppComponent {
     constructor(sds: SitecoreDataService) {
@@ -17,6 +21,10 @@ export class MyAppComponent {
     }
 }
 ```
+
+... where of course the `path/to` portion of the import statements are updated appropriately.
+
+<br>
 
 ## Usage
 
@@ -35,19 +43,23 @@ this.sds.get(this.rendering, 'SocialMedia')
 this.sds.get(this.rendering, 'SocialMedia', 'Facebook')
 ```
 
+<br>
+
 ### Get GraphQL Data
-You can use the `fetch` method to fetch Sitecore data via GraphQL. Similar to the previous method, the returned data is [processed](#processed-data) as well.
+You can use the `fetch` method to fetch Sitecore data via GraphQL. Similar to the previous method, the data is also [processed](#processed-data) before being returned.
 
 **Example**
 ```
-// returns a Sitecore item that matches the passed-in GUID
-this.sds.fetch(GUID)
+// fetch a Sitecore item by GUID
+this.sds.fetch('{83E04F4B-3A98-402F-840B-AEFA415FD147}')
 ```
 
-### Using Types
-The OOTB Sitecore JSS types are currently a bit unwieldy to work with as you‘ll find yourself constantly coercing types to prevent the TypeScript compiler from complaining. We‘ve redefined their types with some slight variations to make it easier to work with JSS data.
+<br>
 
-To use our types, simply import `types` from the library. Aliasing it to `ts` is optional but helps keeps the code less verbose.
+### Using Types
+The OOTB Sitecore JSS type definitions are a bit unwieldy to work with as you'll find yourself constantly coercing types to prevent the TypeScript compiler from yelling at you. We've redefined their types with some slight variations to make it easier to work with JSS data.
+
+To use our type definitions, simply import `types` from the library. Aliasing it to `ts` is optional but helps keeps the code less verbose.
 
 **Example**
 ```
@@ -66,15 +78,20 @@ export class MyFooterComponent implements OnInit {
 }
 ```
 
+<br>
+
 ### Processed Data
-The data returned by `get` and `fetch` is processed before being returned in order to **(a)** address inconsistencies between the Sitecore data structures returned by the JSS endpoint and GraphQL, and **(b)** to make it easier to grab the data properties you need. More specifically:
+The data returned by `get` and `fetch` is processed before being returned in order to **(a)** address inconsistencies between the data structures returned by the JSS endpoint and GraphQL, and **(b)** to make it easier to grab the data properties you need.
+
+More specifically:
 
 - JSS field values are no longer nested inside of a "value" property (e.g. `Image.src` instead of `Image.value.src`).
-- Child items are now _always_ located inside of a "children" property (instead of using `children` just for GraphQL, and `items` for JSS).
+- Child items are now _always_ located inside of a "children" property (instead of being inside `items` for JSS, and `children` for GraphQL).
 - Raw HTML tags are parsed and the appropriate data is abstracted out into an object (e.g. `src` and `alt` is pulled from `<img src="foo" alt="bar" />`).
 
-To further illustrate the aformentioned points, here is an example of a sample GraphQL input before and after data processing:
+To further illustrate the aformentioned points, here are some examples of input before and after data processing:
 
+#### Sample GraphQL
 **Before**
 ```
 [
@@ -110,4 +127,77 @@ To further illustrate the aformentioned points, here is an example of a sample G
         },
     }
 ]
+```
+
+<br>
+
+#### Sample JSS
+**Before**
+```
+{
+    "id": "15538538-d279-4357-a819-37333e5bb293",
+    "name": "SocialMedia",
+    "fields": {
+        "items": [{
+            "id": "40b459f8-b8bf-4552-b611-98e2e175d5d3",
+            "name": "Facebook",
+            "fields": {
+                "Url": {
+                    "value": {
+                        "href": "https://www.facebook.com/abc-corp/",
+                        "url": "https://www.facebook.com/abc-corp/"
+                    }
+                },
+                "Text": {
+                    "value": "ABC Corp Facebook"
+                }
+            }
+        }, {
+            "id": "7e22ad97-6925-4703-aeee-471fad2e2770",
+            "name": "Instagram",
+            "fields": {
+                "Url": {
+                    "value": {
+                        "href": "https://www.instagram.com/abc-corp/",
+                        "url": "https://www.instagram.com/abc-corp/"
+                    }
+                },
+                "Text": {
+                    "value": "ABC Corp Instagram"
+                }
+            }
+        }]
+    }
+}
+```
+
+**After**
+```
+{
+    id: '15538538-d279-4357-a819-37333e5bb293',
+    name: 'SocialMedia',
+    fields: {
+        children: [{
+            id: '40b459f8-b8bf-4552-b611-98e2e175d5d3',
+            name: 'Facebook',
+            fields: {
+                Url: {
+                    href: 'https://www.facebook.com/abc-corp/',
+                    url: 'https://www.facebook.com/abc-corp/',
+                },
+                Text: 'ABC Corp Facebook',
+            },
+        }, {
+            id: '7e22ad97-6925-4703-aeee-471fad2e2770',
+            name: 'Instagram',
+            fields: {
+                Url: {
+                    href: 'https://www.instagram.com/abc-corp/',
+                    url: 'https://www.instagram.com/abc-corp/',
+                },
+                Text: 'ABC Corp Instagram',
+            },
+        }],
+    },
+}
 ```

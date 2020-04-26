@@ -1,40 +1,6 @@
 /*
     * Data Processor
-        - Contains data utility methods to help process the JSS and GraphQL data into a consistent and easier-to-use format.
-
-    ? [Sample GraphQL Input]
-        [
-            {
-                id: '0FBC47145B4B44B48E8AD1B3CF809ACE',
-                name: "Australia",
-                fields: [
-                    {
-                        name: "Flag"
-                        value: "<image mediaid="{B17AB46D-F1C9-42A6-93C9-CBF53E1F6374}" />"
-                        rendered: "<img src="/-/media/Images/Project/Common/Country-Flags/Flags/flag_australia.ashx?h=32&amp;iar=0&amp;w=32&amp;hash=721225B8E10063F2A18D4E61B09A67A6" alt="" width="32" height="32" />"
-                        __typename: "ImageField"
-                        __proto__: Object
-                    },
-                ]
-            }
-        ]
-
-    ? [Sample GraphQL Output]
-        [
-            {
-                id: '0FBC47145B4B44B48E8AD1B3CF809ACE',
-                name: 'Australia',
-                fields: {
-                    Flag: {
-                        src: "/-/media/Images/Project/Common/Country-Flags/Flags/flag_australia.ashx?h=32&amp;iar=0&amp;w=32&amp;hash=721225B8E10063F2A18D4E61B09A67A6",
-                        width: 32,
-                        height: 32,
-                        alt: "",
-                    },
-                },
-            }
-        ]
-
+        - Contains data utility methods to help process both JSS and GraphQL data into a consistent and easier-to-use format.
 */
 
 import * as ts from './types';

@@ -1,23 +1,26 @@
 # XC JSS Libraries
+This project contains libraries to assist with front-end development for Sitecore JSS projects.
 
-This project contains libraries to assist with Sitecore JSS-related front-end development. There is currently only one library in this rep - `jss-angular-kit`.
+<br>
 
 ## Contributing
+Navigate to the directory of the library you want to update (e.g. `projects/jss-angular-kit`) and make your changes there. If you need to add new public-facing APIs, make sure they are listed inside of the `public-api.ts` file.
 
-Navigate to `projects/jss-angular-kit` and make your changes there. If you need to add new public-facing APIs, make sure they are listed inside of the `projects/jss-angular-kit/src/public-api.ts` file.
+<br>
 
 ## Testing
-Within the `projects/jss-angular-kit` directory, run `npm run build && npm run pack`. This will create a `.tgz` file in the `dist/jss-angular-kit` folder - which you can then `npm install` into another project for testing. For example:
+Within the library directory, run `npm run build && npm run pack`. This will create a `.tgz` file in the `dist/your-library-name` folder - which you can then `npm install` into another project for testing. For example:
 
 ```
 cd path/to/other/project
 
-npm i path/to/tgz/in/dist/folder
+npm i path/to/tgz
 ```
 
-## Publishing
+<br>
 
-Within the `projects/jss-angular-kit` directory, run `npm run build`. Now you can git commit your changes and publish to the npm registry:
+## Publishing
+Within the library directory, run `npm run build`. Now you can git commit your changes and publish to the npm registry:
 
 ```
 git add . --all
@@ -27,4 +30,4 @@ npm publish
 git push
 ```
 
-... where `[semver]` should be replaced with either `major`, `minor`, or `patch`. See [NPM - About Semantic Versioning](https://docs.npmjs.com/about-semantic-versioning) for more information.
+... note that `[semver]` should be replaced with either `major`, `minor`, or `patch`. See [NPM - About Semantic Versioning](https://docs.npmjs.com/about-semantic-versioning) for more information.
