@@ -29,7 +29,14 @@ npm run build
 
 ... where `[semver]` should be replaced with either `major`, `minor`, or `patch`. See [NPM - About Semantic Versioning](https://docs.npmjs.com/about-semantic-versioning) for more information.
 
-Next, **navigate to the dist folder** (e.g. `dist/jss-angular-kit`) to publish the package:
+Next, git commit and push up your changes:
+
+```
+git commit -m 'some message here'
+git push
+```
+
+Finally, **navigate to the dist folder** (e.g. `dist/jss-angular-kit`) to publish the package:
 
 ```
 npm publish
