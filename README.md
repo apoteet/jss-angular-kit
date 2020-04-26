@@ -22,9 +22,9 @@ Within the `projects/jss-angular-kit` directory, run `npm run build`. Now you ca
 ```
 git add . --all
 git commit -m "some message here"
-npm version minor
+npm version [semver]
 npm publish
 git push
 ```
 
-... Note that if this is a bugfix, you should use `npm version patch`. Likewise if this is a major / breaking change - you should use `npm version major`.
+... where `[semver]` should be replaced with either `major`, `minor`, or `patch`. See [NPM - About Semantic Versioning](https://docs.npmjs.com/about-semantic-versioning) for more information.

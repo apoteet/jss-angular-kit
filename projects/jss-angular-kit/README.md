@@ -1,24 +1,113 @@
-# JssAngularKit
+# JSS Angular Kit
+This project contains helper functions and interfaces to assist with Sitecore JSS-related front-end development.
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.3.
+## Installation
+1) Run `npm i @xcentium/jss-angular-kit`.
+2) Inside of your root app component (named `app.component.ts` by default), initialize the Sitecore Data Service like so:
 
-## Code scaffolding
+```
+import { SitecoreDataService } from '@xcentium/jss-angular-kit';
 
-Run `ng generate component component-name --project jss-angular-kit` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project jss-angular-kit`.
-> Note: Don't forget to add `--project jss-angular-kit` or else it will be added to the default project in your `angular.json` file. 
+export class MyAppComponent {
+    constructor(sds: SitecoreDataService) {
+        sds.init({
+            graphQLService: jssGraphQLService,
+            host: jssConfig.sitecore.layoutServiceHost,
+        });
+    }
+}
+```
 
-## Build
+## Usage
 
-Run `ng build jss-angular-kit` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Get JSS Data
+You can use the `get` method to fetch Sitecore data via JSS. The data is [processed](#processed-data) before being returned, in order to make it more consistent, predictable, and easier to parse.
 
-## Publishing
+**Examples**
+```
+// simply return the rendering itself
+this.sds.get(this.rendering)
 
-After building your library with `ng build jss-angular-kit`, go to the dist folder `cd dist/jss-angular-kit` and run `npm publish`.
+// return a specific Sitecore item
+this.sds.get(this.rendering, 'SocialMedia')
 
-## Running unit tests
+// return a specific Sitecore field
+this.sds.get(this.rendering, 'SocialMedia', 'Facebook')
+```
 
-Run `ng test jss-angular-kit` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Get GraphQL Data
+You can use the `fetch` method to fetch Sitecore data via GraphQL. Similar to the previous method, the returned data is [processed](#processed-data) as well.
 
-## Further help
+**Example**
+```
+// returns a Sitecore item that matches the passed-in GUID
+this.sds.fetch(GUID)
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### Using Types
+The OOTB Sitecore JSS types are currently a bit unwieldy to work with as you‘ll find yourself constantly coercing types to prevent the TypeScript compiler from complaining. We‘ve redefined their types with some slight variations to make it easier to work with JSS data.
+
+To use our types, simply import `types` from the library. Aliasing it to `ts` is optional but helps keeps the code less verbose.
+
+**Example**
+```
+import { SitecoreDataService, types as ts } from '@xcentium/jss-angular-kit';
+
+constructor(private sds: SitecoreDataService) {}
+
+export class MyFooterComponent implements OnInit {
+    @Input() rendering: ts.JssComponentRendering;
+
+    socialMedia: ts.DataItem;
+
+    ngOnInit(): void {
+        this.socialMedia = this.sds.get(this.rendering, 'SocialMedia');
+    }
+}
+```
+
+### Processed Data
+The data returned by `get` and `fetch` is processed before being returned in order to **(a)** address inconsistencies between the Sitecore data structures returned by the JSS endpoint and GraphQL, and **(b)** to make it easier to grab the data properties you need. More specifically:
+
+- JSS field values are no longer nested inside of a "value" property (e.g. `Image.src` instead of `Image.value.src`).
+- Child items are now _always_ located inside of a "children" property (instead of using `children` just for GraphQL, and `items` for JSS).
+- Raw HTML tags are parsed and the appropriate data is abstracted out into an object (e.g. `src` and `alt` is pulled from `<img src="foo" alt="bar" />`).
+
+To further illustrate the aformentioned points, here is an example of a sample GraphQL input before and after data processing:
+
+**Before**
+```
+[
+    {
+        id: '0FBC47145B4B44B48E8AD1B3CF809ACE',
+        name: "Australia",
+        fields: [
+            {
+                name: "Flag"
+                value: "<image mediaid="{B17AB46D-F1C9-42A6-93C9-CBF53E1F6374}" />"
+                rendered: "<img src="/-/media/Images/Project/Common/Country-Flags/Flags/flag_australia.ashx?h=32&amp;iar=0&amp;w=32&amp;hash=721225B8E10063F2A18D4E61B09A67A6" alt="" width="32" height="32" />"
+                __typename: "ImageField"
+                __proto__: Object
+            },
+        ]
+    }
+]
+```
+
+**After**
+```
+[
+    {
+        id: '0FBC47145B4B44B48E8AD1B3CF809ACE',
+        name: 'Australia',
+        fields: {
+            Flag: {
+                src: "/-/media/Images/Project/Common/Country-Flags/Flags/flag_australia.ashx?h=32&amp;iar=0&amp;w=32&amp;hash=721225B8E10063F2A18D4E61B09A67A6",
+                width: 32,
+                height: 32,
+                alt: "",
+            },
+        },
+    }
+]
+```
