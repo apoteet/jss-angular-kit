@@ -1,0 +1,62 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "tsconfig.json",
+        "extraFileExtensions": [".json"]
+    },
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+        "@typescript-eslint/camelcase": 0,
+        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-use-before-define": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "arrow-body-style": 0,
+        "class-methods-use-this": 0,
+        "consistent-return": 0,
+        "func-names": 0,
+        "import/extensions": 0,
+        "import/no-cycle": 0,
+        "import/no-extraneous-dependencies": 0,
+        "import/no-webpack-loader-syntax": 0,
+        "import/no-unresolved": 0,
+        "import/prefer-default-export": 0,
+        "indent": ["error", 4, { "SwitchCase": 1 }],
+        "linebreak-style": 0,
+        "lines-between-class-members": 0,
+        "max-classes-per-file": 0,
+        "max-len": 0,
+        "no-await-in-loop": 0,
+        "no-bitwise": ["error"],
+        "no-console": 0,
+        "no-plusplus": 0,
+        "no-param-reassign": 0,
+        "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
+        "no-return-assign": 0,
+        "no-underscore-dangle": 0,
+        "no-useless-constructor": 0,
+        "no-useless-escape": 0,
+        "no-useless-return": 0,
+        "object-curly-newline": ["error", { "ObjectPattern": { "multiline": true, "minProperties": 6 } }],
+        "prefer-arrow-callback": 0,
+        "prefer-destructuring": ["error", { "array": false }],
+        "space-in-parens": 0,
+        "template-curly-spacing": ["error", "always"]
+    },
+    "extends": [
+        "airbnb-base",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    ],
+    "settings": {
+        "import/resolver": {
+            "alias": {
+                "map": [
+                    ["@", "./src"]
+                ],
+                "extensions": [".js", ".ts", ".json", ".gql"]
+            }
+        }
+    }
+}

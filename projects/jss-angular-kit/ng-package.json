@@ -1,0 +1,11 @@
+{
+    "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+    "dest": "../../dist/jss-angular-kit",
+    "lib": {
+        "entryFile": "src/public-api.ts",
+        "umdModuleIds": {
+            "graphql-tag/loader!./item-query.gql": "ItemQuery"
+        }
+    },
+    "whitelistedNonPeerDependencies": ["nan", "graphql-tag"]
+}

@@ -1,0 +1,23 @@
+query ItemQuery($path: String!) {
+    item(path: $path) {
+        id
+        name
+
+        fields(ownFields: true) {
+            name
+            value
+            rendered
+        }
+       
+        children {
+            id
+            name
+
+            fields(ownFields: true) {
+                name
+                value
+                rendered
+            }
+        }
+    }
+}

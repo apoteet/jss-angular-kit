@@ -1,23 +1,29 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
-  },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "target": "es2015",
+        "allowSyntheticDefaultImports": true,
+        "lib": [ "es2018", "dom"],
+        "paths": {
+            "jss-angular-kit": [
+                "dist/jss-angular-kit/jss-angular-kit",
+                "dist/jss-angular-kit"
+            ]
+        },
+        "types": ["node"]
+    },
+    "angularCompilerOptions": {
+        "enableIvy": false,
+        "fullTemplateTypeCheck": true,
+        "strictInjectionParameters": true
+    }
 }

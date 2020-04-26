@@ -1,27 +1,30 @@
-# XcJssLibs
+# XC JSS Libraries
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.3.
+This project contains libraries to assist with Sitecore JSS-related front-end development. There is currently only one library in this rep - `jss-angular-kit`.
 
-## Development server
+## Contributing
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Navigate to `projects/jss-angular-kit` and make your changes there. If you need to add new public-facing APIs, make sure they are listed inside of the `projects/jss-angular-kit/src/public-api.ts` file.
 
-## Code scaffolding
+## Testing
+Within the `projects/jss-angular-kit` directory, run `npm run build && npm run pack`. This will create a `.tgz` file in the `dist/jss-angular-kit` folder - which you can then `npm install` into another project for testing. For example:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```
+cd path/to/other/project
 
-## Build
+npm i path/to/tgz/in/dist/folder
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Publishing
 
-## Running unit tests
+Within the `projects/jss-angular-kit` directory, run `npm run build`. Now you can git commit your changes and publish to the npm registry:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```
+git add . --all
+git commit -m "some message here"
+npm version minor
+npm publish
+git push
+```
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+... Note that if this is a bugfix, you should use `npm version patch`. Likewise if this is a major / breaking change - you should use `npm version major`.
