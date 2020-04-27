@@ -13,7 +13,7 @@
         "ng": "ng",
         "pack": "cd dist && npm pack",
         "build": "ng build && cpy src/lib/item-query.gql dist/fesm5",
-        "publish": "cd dist && npm publish"
+        "publish": "npm run build && cd dist && npm publish"
     },
     "dependencies": {
         "@angular/core": "~9.1.3",

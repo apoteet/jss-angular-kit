@@ -227,10 +227,9 @@ Run the following:
 
 ```
 git add . --all
-npm version [semver]
-npm run build
 git commit -m 'some message here'
 git push
+npm version [semver]
 npm run publish
 ```
 
