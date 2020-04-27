@@ -15,12 +15,13 @@
         "lib": [ "es2018", "dom"],
         "paths": {
             "jss-angular-kit": [
-                "dist/jss-angular-kit/jss-angular-kit",
-                "dist/jss-angular-kit"
+                "dist"
             ]
         },
-        "types": ["node"]
+        "types": ["node"],
+        "typeRoots": ["src/@types/"]
     },
+    "files": ["src/@types/graphql.d.ts"],
     "angularCompilerOptions": {
         "enableIvy": false,
         "fullTemplateTypeCheck": true,

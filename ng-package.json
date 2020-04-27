@@ -1,0 +1,19 @@
+{
+    "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
+    "dest": "dist",
+    "lib": {
+        "entryFile": "src/public-api.ts",
+        "umdModuleIds": {
+            "graphql-tag/loader!./item-query.gql": "ItemQuery"
+        }
+    },
+    "whitelistedNonPeerDependencies": [
+        "@angular/compiler",
+        "@angular/core",
+        "graphql",
+        "graphql-tag",
+        "nan",
+        "tslib",
+        "zone.js"
+    ]
+}

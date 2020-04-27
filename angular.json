@@ -5,40 +5,20 @@
     "projects": {
         "jss-angular-kit": {
             "projectType": "library",
-            "root": "projects/jss-angular-kit",
-            "sourceRoot": "projects/jss-angular-kit/src",
+            "root": "",
+            "sourceRoot": "src",
             "prefix": "lib",
             "architect": {
                 "build": {
                     "builder": "@angular-devkit/build-ng-packagr:build",
                     "options": {
-                        "tsConfig": "projects/jss-angular-kit/tsconfig.lib.json",
-                        "project": "projects/jss-angular-kit/ng-package.json"
+                        "tsConfig": "tsconfig.json",
+                        "project": "ng-package.json"
                     },
                     "configurations": {
                         "production": {
-                            "tsConfig": "projects/jss-angular-kit/tsconfig.lib.prod.json"
+                            "tsConfig": "tsconfig.prod.json"
                         }
-                    }
-                },
-                "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
-                    "options": {
-                        "main": "projects/jss-angular-kit/src/test.ts",
-                        "tsConfig": "projects/jss-angular-kit/tsconfig.spec.json",
-                        "karmaConfig": "projects/jss-angular-kit/karma.conf.js"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "projects/jss-angular-kit/tsconfig.lib.json",
-                            "projects/jss-angular-kit/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
                     }
                 }
             }
