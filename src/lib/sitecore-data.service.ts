@@ -90,7 +90,10 @@ export class SitecoreDataService {
 
         const item = findInJss(rendering.fields.items, (i: ts.JssItem) => i.name === itemName);
 
-        if (!fieldName) return this.dp.processJssItem(item);
+        if (!fieldName) {
+            if (!item) return null;
+            return this.dp.processJssItem(item);
+        }
 
         const field = findInJss([item], (i: ts.JssItem) => !!i.fields[fieldName], (i: ts.JssItem) => i.fields[fieldName]);
 
