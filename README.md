@@ -228,8 +228,8 @@ Run the following:
 ```
 git add . --all
 git commit -m 'some message here'
-git push
 npm version [semver]
+git push
 npm run publish
 ```
 
