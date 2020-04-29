@@ -17,8 +17,10 @@ export class DataProcessor {
         host = options.host;
     }
     
-    processJssField(fieldValue: ts.JssField): ts.DataField {
+    processJssField(fieldValue: ts.JssField): ts.DataField | null {
         let processed: ts.DataField;
+
+        if (!fieldValue) return null;
     
         switch (fieldValue.fieldType) {
             case 'Single-Line Text':
