@@ -18,11 +18,15 @@ export class DataProcessor {
     }
     
     processJssField(fieldValue: ts.JssField): ts.DataField | null {
-        let processed: ts.DataField;
+        let processed: ts.DataField = null;
 
-        if (!fieldValue) return null;
-    
-        switch (fieldValue.fieldType) {
+        if (!fieldValue) return processed;
+
+        const fieldType = Array.isArray(fieldValue) && fieldValue.length
+            ? fieldValue[0].fieldType
+            : fieldValue.fieldType;
+
+        switch (fieldType) {
             case 'Single-Line Text':
             case 'Multi-Line Text':
                 processed = (fieldValue as ts.JssText).value;
@@ -58,10 +62,14 @@ export class DataProcessor {
             case 'Droplink':
                 processed = this.processJssField(Object.values((fieldValue as ts.JssDroplink).fields)[0]);
                 break;
+
+            case 'Multilist with Search':
+                processed = fieldValue[0].fields.Value.value;
+                break;
     
             default:
                 if (fieldValue.fieldType) {
-                    console.warn(`[Data Processor] Unable to process the JSS field. The type "${ fieldValue.fieldType }" is not recognized.`, fieldValue);
+                    console.warn(`[Data Processor] Unable to process the JSS field. The type "${ fieldValue.fieldType }" is not recognized.`);
                 }
         }
     
