@@ -74,29 +74,37 @@ export class SitecoreDataService {
 
     get(rendering: ts.JssComponentRendering): ts.DataComponent;
     get(rendering: ts.JssComponentRendering, itemName: string): ts.DataItem | null;
-    get(rendering: ts.JssComponentRendering, itemName: string, fieldName: string): ts.DataField | null;
+    get(rendering: ts.JssComponentRendering, itemName: string | null, fieldName: string): ts.DataField | null;
     get(rendering: ts.JssComponentRendering, itemName?: string, fieldName?: string): any {
-        if (!rendering) {
-            console.warn('[SDS] Please specify a rendering.');
-            return null;
+
+        switch (true) {
+            // empty
+            case !rendering:
+                console.warn('[SDS] Please specify a rendering.');
+                return null;
+
+            // rendering
+            case !itemName && !fieldName:
+                return this.dp.processJssItem(rendering);
+
+            // rendering + itemName
+            case !!itemName && !fieldName: {
+                const item = findInJss(rendering.fields.items, (i: ts.JssItem) => i.name === itemName);
+                return this.dp.processJssItem(item);
+            }
+
+            // rendering + fieldName
+            case !itemName && !!fieldName: {
+                const item = rendering as unknown as ts.JssItem;
+                const field = findInJss([item], (i: ts.JssItem) => !!i.fields[fieldName], (i: ts.JssItem) => i.fields[fieldName]);
+                return this.dp.processJssField(field);
+            }
+
+            // rendering + itemName + fieldName
+            default:
+                const item = findInJss(rendering.fields.items, (i: ts.JssItem) => i.name === itemName);
+                const field = findInJss([item], (i: ts.JssItem) => !!i.fields[fieldName], (i: ts.JssItem) => i.fields[fieldName]);
+                return this.dp.processJssField(field);
         }
-
-        if (fieldName && !itemName) {
-            console.warn('[SDS] Please specify an item name.');
-            return null;
-        }
-
-        if (!itemName) return this.dp.processJssItem(rendering);
-
-        const item = findInJss(rendering.fields.items, (i: ts.JssItem) => i.name === itemName);
-
-        if (!fieldName) {
-            if (!item) return null;
-            return this.dp.processJssItem(item);
-        }
-
-        const field = findInJss([item], (i: ts.JssItem) => !!i.fields[fieldName], (i: ts.JssItem) => i.fields[fieldName]);
-
-        return this.dp.processJssField(field);
     }
 }

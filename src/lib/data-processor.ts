@@ -29,6 +29,7 @@ export class DataProcessor {
         switch (fieldType) {
             case 'Single-Line Text':
             case 'Multi-Line Text':
+            case 'Rich Text':
                 processed = (fieldValue as ts.JssText).value;
                 break;
     
@@ -92,7 +93,9 @@ export class DataProcessor {
     
     // * n.b. "items" and "children" are the property names used for nested items by JSS and GraphQL, respectively
     // * ... we convert everything to use "children" for both consistency, and because it is the more intuitive of the two choices
-    processJssItem(item: ts.JssComponentRendering | ts.JssItem): ts.DataItem {
+    processJssItem(item: ts.JssComponentRendering | ts.JssItem): ts.DataItem | null {
+        if (!item) return null;
+
         const processedItem = JSON.parse(JSON.stringify(item));
     
         if (item.fields.items) {
