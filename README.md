@@ -28,24 +28,27 @@ export class MyAppComponent {
 
 ## Usage
 
-### Get JSS Data
+### Working with JSS Data
 You can use the `get` method to fetch Sitecore data via JSS. The data is [processed](#processed-data) before being returned, in order to make it more consistent, predictable, and easier to parse.
 
 **Examples**
 ```
-// simply return the rendering itself
+// getting a rendering
 this.sds.get(this.rendering)
 
-// return a specific Sitecore item
+// getting an item
 this.sds.get(this.rendering, 'SocialMedia')
 
-// return a specific Sitecore field
+// getting a field from an item
 this.sds.get(this.rendering, 'SocialMedia', 'Facebook')
+
+// getting a field from a rendering
+this.sds.get(this.rendering, null, 'Summary')
 ```
 
 <br>
 
-### Get GraphQL Data
+### Working with GraphQL Data
 You can use the `fetch` method to fetch Sitecore data via GraphQL. Similar to the previous method, the data is also [processed](#processed-data) before being returned.
 
 **Example**
@@ -53,6 +56,42 @@ You can use the `fetch` method to fetch Sitecore data via GraphQL. Similar to th
 // fetch a Sitecore item by GUID
 this.sds.fetch('{83E04F4B-3A98-402F-840B-AEFA415FD147}')
 ```
+
+<br>
+
+### Working with Window Events
+While using window-based events (e.g. `window.addEventListener('click')`) may appear to be trivial - there are a couple of gotchas to keep in mind when using them on Angular applications:
+
+1. Any references to `window` will throw errors during server-side rendering, since the `window` object does not exist in that environment.
+
+2. You must remember to "clean up" after yourself to help avoid memory leaks. This means removing your event listeners inside the `ngOnDestroy` lifecycle hook.
+
+3. When removing your event listeners, rule #1 still applies.
+
+This package contains a "Window Event Service" which makes it easier to work with window-based events without having to worry about the above. Here's an example:
+
+```
+import { Component, OnInit } from '@angular/core';
+import { WindowEventService } from '@xcentium/jss-angular-kit';
+
+@Component({
+    ...
+    providers: [WindowEventService],
+})
+class MyComponent implements OnInit {
+    constructor(private wes: WindowEventService) {}
+
+    ngOnInit(): void {
+        this.wes.on('resize', this.onResize);
+    }
+
+    onResize(): void {
+        // do something on resize
+    }
+}
+```
+
+... note that you don't have to worry about removing your event listener, as the service will take care of that for you.
 
 <br>
 
@@ -67,13 +106,13 @@ import { SitecoreDataService, types as ts } from '@xcentium/jss-angular-kit';
 
 constructor(private sds: SitecoreDataService) {}
 
-export class MyFooterComponent implements OnInit {
+export class MyComponent implements OnInit {
     @Input() rendering: ts.JssComponentRendering;
 
-    socialMedia: ts.DataItem;
+    myItem: ts.DataItem;
 
     ngOnInit(): void {
-        this.socialMedia = this.sds.get(this.rendering, 'SocialMedia');
+        this.myItem = this.sds.get(this.rendering, 'SomeItemName');
     }
 }
 ```
