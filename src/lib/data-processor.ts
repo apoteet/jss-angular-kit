@@ -98,13 +98,15 @@ export class DataProcessor {
 
         const processedItem = JSON.parse(JSON.stringify(item));
     
-        if (item.fields.items) {
+        if (item.fields?.items) {
             const subItems = (item.fields.items);
     
             processedItem.children = subItems.map((subItem) => this.processJssItem(subItem));
         }
     
-        processedItem.fields = this.processJssFields(item.fields);
+        if (item.fields) {
+            processedItem.fields = this.processJssFields(item.fields);
+        }
     
         return processedItem;
     }

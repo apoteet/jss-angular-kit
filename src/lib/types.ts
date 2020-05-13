@@ -219,6 +219,7 @@ export interface DataComponent {
     uid: string;
     componentName: string;
     dataSource: string;
+    fields: DataFieldGroup;
     params: {};
     children: DataItem[];
     placeholders: {};

@@ -107,4 +107,37 @@ export class SitecoreDataService {
                 return this.dp.processJssField(field);
         }
     }
+
+    getRaw(rendering: ts.JssComponentRendering): ts.JssComponentRendering;
+    getRaw(rendering: ts.JssComponentRendering, itemName: string): ts.JssItem | null;
+    getRaw(rendering: ts.JssComponentRendering, itemName: string | null, fieldName: string): ts.JssField | null;
+    getRaw(rendering: ts.JssComponentRendering, itemName?: string, fieldName?: string): any {
+
+        switch (true) {
+            // empty
+            case !rendering:
+                console.warn('[SDS] Please specify a rendering.');
+                return null;
+
+            // rendering
+            case !itemName && !fieldName:
+                return rendering;
+
+            // rendering + itemName
+            case !!itemName && !fieldName: {
+                return findInJss(rendering.fields.items, (i: ts.JssItem) => i.name === itemName);
+            }
+
+            // rendering + fieldName
+            case !itemName && !!fieldName: {
+                const item = rendering as unknown as ts.JssItem;
+                return findInJss([item], (i: ts.JssItem) => !!i.fields[fieldName], (i: ts.JssItem) => i.fields[fieldName]);
+            }
+
+            // rendering + itemName + fieldName
+            default:
+                const item = findInJss(rendering.fields.items, (i: ts.JssItem) => i.name === itemName);
+                return findInJss([item], (i: ts.JssItem) => !!i.fields[fieldName], (i: ts.JssItem) => i.fields[fieldName]);
+        }
+    }
 }
