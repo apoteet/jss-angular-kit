@@ -37,7 +37,7 @@ export interface JssRouteData {
 
 // placeholder contents (name: placeholder name, then array of components within that placeholder name)
 export declare type JssPlaceholdersData<TYPEDNAME extends string = string> = {
-    [P in TYPEDNAME]: Array<JssComponentRendering | JssHtmlElementRendering>;
+    [P in TYPEDNAME]: Array<JssComponentRendering & JssHtmlElementRendering>;
 };
 
 export type JssComponentFields = JssComponentFieldsA & JssComponentFieldsB;
