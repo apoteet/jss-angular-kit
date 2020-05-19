@@ -8,8 +8,13 @@
         }
     },
     "whitelistedNonPeerDependencies": [
+        "@angular-devkit/core",
+        "@angular-devkit/schematics",
         "@angular/compiler",
         "@angular/core",
+        "@schematics/angular",
+        "chalk",
+        "change-case",
         "graphql",
         "graphql-tag",
         "nan",
