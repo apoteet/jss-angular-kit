@@ -119,7 +119,7 @@ export class MyComponent implements OnInit {
 
 <br>
 
-### Processed Data
+### Working with Processed Data
 The data returned by `get` and `fetch` is processed before being returned in order to **(a)** address inconsistencies between the data structures returned by the JSS endpoint and GraphQL, and **(b)** to make it easier to grab the data properties you need.
 
 More specifically:
@@ -242,6 +242,22 @@ To further illustrate the aformentioned points, here are some examples of input 
     },
 }
 ```
+
+<br>
+
+### Using the JSS Component Schematic
+The schematic included in this package will both scaffold a new component, and register it with the JSS module. To use the schematic, add the following npm script to your `package.json` file (if it does not already exist):
+
+`"scaffold": "ng generate @xcentium/jss-angular-kit:jss-component"`
+
+... then run it using:
+
+`npm run scaffold some-folder/some-component-name`
+
+Note that the schematic makes a few assumptions about the structure of your project. Namely:
+
+1) That adding `@import "global"` to your starting .scss file will work, aka you must have a global.scss file that can be imported.
+2) That adding `<app-placeholder>` to your starting .html file will work, aka you must have an app-placeholder component.
 
 <br>
 
