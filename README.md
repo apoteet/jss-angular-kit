@@ -1,5 +1,13 @@
 # JSS Angular Kit
-A collection of helper functions and TypeScript interfaces to assist with Angular projects that use Sitecore JSS.
+A collection of helper functions, directives, services and type definitions to assist with Angular projects that use Sitecore JSS. The JSS Angular Kit includes the following:
+
+- Sitecore Data Service
+- Window Event Service
+- Link Directive
+- Custom Types
+- Component Schematics
+
+... You can read more about each one further down in the README.
 
 <br>
 
@@ -95,7 +103,7 @@ class MyComponent implements OnInit {
 
 <br>
 
-### Using Types
+### Using the Custom Types
 The OOTB Sitecore JSS type definitions are a bit unwieldy to work with as you'll find yourself constantly coercing types to prevent the TypeScript compiler from yelling at you. We've redefined their types with some slight variations to make it easier to work with JSS data.
 
 To use our type definitions, simply import `types` from the library. Aliasing it to `ts` is optional but helps keeps the code less verbose.
@@ -258,6 +266,37 @@ Note that the schematic makes a few assumptions about the structure of your proj
 
 1) That adding `@import "global"` to your starting .scss file will work, aka you must have a global.scss file that can be imported.
 2) That adding `<app-placeholder>` to your starting .html file will work, aka you must have an app-placeholder component.
+
+<br>
+
+### Working with the Link Directive
+
+The link directive encapsulates some of the complex logic that is required to work with Sitecore links and the Angular router, in tandem. Specifically it solves the following two problems for you:
+
+1) The Angular `[routerLink]` directive does not work with external URLs.
+2) The `href` property in the Sitecore link JSS data does not always contain the correct URL.
+
+**To use the link directive**, first import the XC Module into `app-component.module.ts`:
+
+```
+import { NgModule } from '@angular/core';
+import { XcModule } from '@xcentium/jss-angular-kit';
+
+@NgModule({
+    imports: [XcModule],
+
+    exports: [XcModule],
+})
+export class AppComponentsModule {}
+```
+
+**Next**, use `[appLink]` on any anchor element like so:
+
+```
+<a [appLink]="myLinkData">
+    Click Me!
+</a>
+```
 
 <br>
 
