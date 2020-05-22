@@ -2,11 +2,13 @@
  * Public API Surface of jss-angular-kit
  */
 
-import * as types from './lib/types';
-import { SitecoreDataService } from './lib/sitecore-data.service';
-import { WindowEventService } from './lib/window-event.service';
+import { JakModule } from './lib/modules/jak.module';
+import * as types from './lib/data/types';
+import { SitecoreDataService } from './lib/services/sitecore-data.service';
+import { WindowEventService } from './lib/services/window-event.service';
 
 export {
+    JakModule,
     types,
     SitecoreDataService,
     WindowEventService,

@@ -134,10 +134,13 @@ export interface JssLink {
     fieldType: string;
     value: {
         href: string;
-        text?: string;
+        text: string;
+        url?: string;
+        anchor: string;
+        linktype: string;
         target?: string;
         title?: string;
-        anchor?: string;
+        querystring?: string;
     };
 }
 
@@ -241,9 +244,11 @@ export interface DataImage {
 
 export interface DataLink {
     href: string;
-    text?: string;
+    text: string;
+    url?: string;
+    anchor: string;
+    linktype: string;
     target?: string;
     title?: string;
-    rel?: string;
-    anchor?: string;
+    querystring?: string;
 }

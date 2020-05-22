@@ -3,7 +3,7 @@
         - Contains data utility methods to help process both JSS and GraphQL data into a consistent and easier-to-use format.
 */
 
-import * as ts from './types';
+import * as ts from '../data/types';
 
 interface Options {
     host: string;
@@ -50,9 +50,12 @@ export class DataProcessor {
                 processed = {
                     href: (fieldValue as ts.JssLink).value.href,
                     text: (fieldValue as ts.JssLink).value.text,
+                    url: (fieldValue as ts.JssLink).value.url,
+                    anchor: (fieldValue as ts.JssLink).value.anchor,
+                    linktype: (fieldValue as ts.JssLink).value.linktype,
                     target: (fieldValue as ts.JssLink).value.target,
                     title: (fieldValue as ts.JssLink).value.title,
-                    anchor: (fieldValue as ts.JssLink).value.anchor,
+                    querystring: (fieldValue as ts.JssLink).value.querystring,
                 };
                 break;
     
@@ -117,11 +120,11 @@ export class DataProcessor {
             name: item.name,
         };
 
-        function parseImageTag(tag: string): ts.DataImage {
-            const srcMatches = attrRegex('src').exec(tag);
-            const widthMatches = attrRegex('width').exec(tag);
-            const heightMatches = attrRegex('height').exec(tag);
-            const altMatches = attrRegex('alt').exec(tag);
+        function parseImageTag(field: ts.GqlField): ts.DataImage {
+            const srcMatches = attrRegex('src').exec(field.rendered);
+            const widthMatches = attrRegex('width').exec(field.rendered);
+            const heightMatches = attrRegex('height').exec(field.rendered);
+            const altMatches = attrRegex('alt').exec(field.rendered);
         
             return {
                 src: srcMatches ? `${ host }${ srcMatches[1] }` : '',
@@ -131,17 +134,22 @@ export class DataProcessor {
             };
         }
         
-        function parseLinkTag(tag: string): ts.DataLink {
-            const hrefMatches = attrRegex('href').exec(tag);
-            const targetMatches = attrRegex('target').exec(tag);
-            const titleMatches = attrRegex('title').exec(tag);
-            const relMatches = attrRegex('rel').exec(tag);
+        function parseLinkTag(field: ts.GqlField): ts.DataLink {
+            // * n.b. the href only exists on field.rendered, every other property exists on field.value
+            const hrefMatches = attrRegex('href').exec(field.rendered);
+            const targetMatches = attrRegex('target').exec(field.value);
+            const titleMatches = attrRegex('title').exec(field.value);
+            const textMatches = attrRegex('text').exec(field.value);
+            const anchorMatches = attrRegex('anchor').exec(field.value);
+            const linkTypeMatches = attrRegex('linktype').exec(field.value);
         
             return {
                 href: hrefMatches ? hrefMatches[1] : '',
                 target: targetMatches ? targetMatches[1] : '',
                 title: titleMatches ? titleMatches[1] : '',
-                rel: relMatches ? relMatches[1] : '',
+                text: textMatches ? textMatches[1] : '',
+                anchor: anchorMatches ? anchorMatches[1] : '',
+                linktype: linkTypeMatches ? linkTypeMatches[1] : '',
             };
         }
     
@@ -157,7 +165,7 @@ export class DataProcessor {
                     break;
     
                 case 'ImageField': {
-                    const { src, width, height, alt } = parseImageTag(field.rendered);
+                    const { src, width, height, alt } = parseImageTag(field);
     
                     keyValPair = {
                         [field.name]: {
@@ -172,14 +180,18 @@ export class DataProcessor {
                 }
     
                 case 'LinkField': {
-                    const { href, target, title, rel } = parseLinkTag(field.rendered);
+                    const { href, text, url, anchor, linktype, target, title, querystring } = parseLinkTag(field);
     
                     keyValPair = {
                         [field.name]: {
                             href,
+                            text,
+                            url,
+                            anchor,
+                            linktype,
                             target,
                             title,
-                            rel,
+                            querystring,
                         },
                     };
     

@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 
-import { DataProcessor } from './data-processor';
-import * as ts from './types';
+import { DataProcessor } from '../data/data-processor';
+import * as ts from '../data/types';
 
 // we need to use the webpack loader require syntax in order to load the GraphQL query
 const ItemQuery = require('graphql-tag/loader!./item-query.gql');

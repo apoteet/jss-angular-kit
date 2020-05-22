@@ -10,8 +10,10 @@
     "whitelistedNonPeerDependencies": [
         "@angular-devkit/core",
         "@angular-devkit/schematics",
+        "@angular/common",
         "@angular/compiler",
         "@angular/core",
+        "@angular/router",
         "@schematics/angular",
         "chalk",
         "change-case",
