@@ -10,11 +10,14 @@ export class LinkDirective implements OnInit {
 
     dataNew: ts.DataLink;
     isInternal = false;
+    elem: HTMLElement;
 
     constructor(
-        private elem: ElementRef,
+        private elementRef: ElementRef,
         private router: Router,
-    ) {}
+    ) {
+        this.elem = elementRef.nativeElement;
+    }
 
     ngOnInit(): void {
         if ('value' in this.data) {
@@ -28,6 +31,7 @@ export class LinkDirective implements OnInit {
         }
 
         this.setAttributes();
+        this.setText();
     }
 
     @HostListener('click', ['$event']) onMouseEnter(e: MouseEvent): void {
@@ -40,12 +44,18 @@ export class LinkDirective implements OnInit {
     setAttributes(): void {
         const { href, target, title, url } = this.dataNew;
 
-        if (title) this.elem.nativeElement.setAttribute('title', title);
-        if (target) this.elem.nativeElement.setAttribute('title', title);
+        if (title) this.elem.setAttribute('title', title);
+        if (target) this.elem.setAttribute('title', title);
 
         // for tel links (e.g. tel:18002224444), we need to use the url property as it contains the correct formatting
         // ... whereas the href property does not, as Sitecore automatically prepends the HTTP protocol (e.g. http://tel:18002224444)
         // ... and we fallback to using href if for some reason the url property does not exist
-        this.elem.nativeElement.setAttribute('href', url || href);
+        this.elem.setAttribute('href', url || href);
+    }
+
+    setText(): void {
+        if (!this.elem.childNodes.length) {
+            this.elem.textContent = this.dataNew.text;
+        }
     }
 }
