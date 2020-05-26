@@ -50,7 +50,7 @@ export class LinkDirective implements OnInit {
         // for tel links (e.g. tel:18002224444), we need to use the url property as it contains the correct formatting
         // ... whereas the href property does not, as Sitecore automatically prepends the HTTP protocol (e.g. http://tel:18002224444)
         // ... and we fallback to using href if for some reason the url property does not exist
-        this.elem.setAttribute('href', url || href);
+        if (url || href) this.elem.setAttribute('href', url || href);
     }
 
     setText(): void {
