@@ -1,11 +1,11 @@
-import { Directive, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as ts from '../data/types';
 
 @Directive({
     selector: '[appLink]',
 })
-export class LinkDirective implements OnInit {
+export class LinkDirective implements OnInit, AfterViewInit {
     @Input('appLink') data: ts.JssLink | ts.DataLink
 
     dataNew: ts.DataLink;
@@ -32,6 +32,16 @@ export class LinkDirective implements OnInit {
 
         this.setAttributes();
         this.setText();
+    }
+
+    ngAfterViewInit(): void {
+        const { href, url } = this.dataNew;
+
+        // * Sitecore's scLink directive still adds an empty href attribute if no link data is present
+        // * ... this prevents that behavior
+        if (!url && !href) {
+            this.elem.removeAttribute('href')
+        }
     }
 
     @HostListener('click', ['$event']) onMouseEnter(e: MouseEvent): void {
