@@ -16,7 +16,7 @@ export class LinkDirective implements OnInit, AfterViewInit {
         private elementRef: ElementRef,
         private router: Router,
     ) {
-        this.elem = elementRef.nativeElement;
+        this.elem = this.elementRef.nativeElement;
     }
 
     ngOnInit(): void {
@@ -55,7 +55,8 @@ export class LinkDirective implements OnInit, AfterViewInit {
         const { href, target, title, url } = this.dataNew;
 
         if (title) this.elem.setAttribute('title', title);
-        if (target) this.elem.setAttribute('title', title);
+        if (target) this.elem.setAttribute('target', target);
+        if (target === '_blank') this.elem.setAttribute('rel', 'noreferrer noopener');
 
         // for tel links (e.g. tel:18002224444), we need to use the url property as it contains the correct formatting
         // ... whereas the href property does not, as Sitecore automatically prepends the HTTP protocol (e.g. http://tel:18002224444)

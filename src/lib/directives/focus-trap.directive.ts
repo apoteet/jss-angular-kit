@@ -15,16 +15,16 @@ export class FocusTrapDirective implements AfterViewInit, OnChanges, OnDestroy {
 
     TAB_KEY_CODE = 9;
     FOCUSABLE_ELEMENT_SELECTORS = [
-        '[contenteditable]:not([hidden])',
-        '[tabindex="0"]:not([hidden])',
-        'a[href]:not([hidden])',
-        'area[href]:not([hidden])',
-        'button:not([disabled]):not([hidden])',
-        'iframe:not([hidden])',
-        'input:not([disabled]):not([hidden])',
-        'object:not([hidden])',
-        'select:not([disabled]):not([hidden])',
-        'textarea:not([disabled]):not([hidden])',
+        '[contenteditable]:not([aria-hidden])',
+        '[tabindex="0"]:not([aria-hidden])',
+        'a[href]:not([aria-hidden])',
+        'area[href]:not([aria-hidden])',
+        'button:not([disabled]):not([aria-hidden])',
+        'iframe:not([aria-hidden])',
+        'input:not([disabled]):not([aria-hidden])',
+        'object:not([aria-hidden])',
+        'select:not([disabled]):not([aria-hidden])',
+        'textarea:not([disabled]):not([aria-hidden])',
     ];
 
     constructor(private elementRef: ElementRef) {
@@ -62,7 +62,7 @@ export class FocusTrapDirective implements AfterViewInit, OnChanges, OnDestroy {
 
     cacheFocusableElements = (): void => {
         const allFocusableElements = this.parentElem.querySelectorAll(this.FOCUSABLE_ELEMENT_SELECTORS.join(', '));
-        const hiddenElements = this.parentElem.querySelectorAll(this.FOCUSABLE_ELEMENT_SELECTORS.map((s) => `[hidden] ${ s }`).join(', '));
+        const hiddenElements = this.parentElem.querySelectorAll(this.FOCUSABLE_ELEMENT_SELECTORS.map((s) => `[aria-hidden] ${ s }`).join(', '));
 
         this.focusableElements = Array.from(allFocusableElements).filter((elem) => {
             return !Array.from(hiddenElements).includes(elem);
