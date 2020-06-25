@@ -202,7 +202,8 @@ export interface DataFieldGroupB {
 export type DataField = string
     | DataImage
     | DataLink
-    | DataItem[];
+    | DataItem[]
+    | DataField[];
 
 export interface DataRoute {
     name: string;

@@ -77,12 +77,9 @@ export class DataProcessor {
                 processed = (fieldValue as ts.JssText).value;
                 break;
 
-            case 'Treelist': {
-                // hacky, but keeps TypeScript from yelling at us
-                const proc = (fieldValue as unknown as ts.JssItem[]).map((item) => this.processJssField(Object.values((item as ts.JssItem).fields)[0]));
-                processed = proc as unknown as ts.DataItem[];
+            case 'Treelist': 
+                processed = (fieldValue as unknown as ts.JssItem[]).map((item) => this.processJssField(Object.values((item as ts.JssItem).fields)[0]));
                 break;
-            }
     
             default:
                 if (fieldValue.fieldType) {
