@@ -26,26 +26,19 @@ export class DataProcessor {
             ? fieldValue[0].fieldType
             : fieldValue.fieldType;
 
-        switch (fieldType) {
-            case 'Single-Line Text':
-            case 'Multi-Line Text':
-            case 'Rich Text':
-                processed = (fieldValue as ts.JssText).value;
-                break;
-    
+        switch (fieldType) {    
             case 'Checkbox':
                 processed = (fieldValue as ts.JssCheckbox).value;
                 break;
-    
-            case 'Image':
-                processed = {
-                    src: (fieldValue as ts.JssImage).value.src,
-                    alt: (fieldValue as ts.JssImage).value.alt,
-                    width: (fieldValue as ts.JssImage).value.width,
-                    height: (fieldValue as ts.JssImage).value.height,
-                };
+
+            case 'Droplink':
+                processed = this.processJssField(Object.values((fieldValue as ts.JssDroplink).fields)[0]);
                 break;
     
+            case 'Droplist':
+                processed = (fieldValue as ts.JssDroplist).value;
+                break;
+
             case 'General Link':
                 processed = {
                     href: (fieldValue as ts.JssLink).value.href,
@@ -58,18 +51,38 @@ export class DataProcessor {
                     querystring: (fieldValue as ts.JssLink).value.querystring,
                 };
                 break;
-    
-            case 'Droplist':
-                processed = (fieldValue as ts.JssDroplist).value;
+
+            case 'Image':
+                processed = {
+                    src: (fieldValue as ts.JssImage).value.src,
+                    alt: (fieldValue as ts.JssImage).value.alt,
+                    width: (fieldValue as ts.JssImage).value.width,
+                    height: (fieldValue as ts.JssImage).value.height,
+                };
                 break;
-    
-            case 'Droplink':
-                processed = this.processJssField(Object.values((fieldValue as ts.JssDroplink).fields)[0]);
+
+            case 'Multi-Line Text':
+                processed = (fieldValue as ts.JssText).value;
                 break;
 
             case 'Multilist with Search':
                 processed = fieldValue[0].fields.Value.value;
                 break;
+
+            case 'Rich Text':
+                processed = (fieldValue as ts.JssText).value;
+                break;
+
+            case 'Single-Line Text':
+                processed = (fieldValue as ts.JssText).value;
+                break;
+
+            case 'Treelist': {
+                // hacky, but keeps TypeScript from yelling at us
+                const proc = (fieldValue as unknown as ts.JssItem[]).map((item) => this.processJssField(Object.values((item as ts.JssItem).fields)[0]));
+                processed = proc as unknown as ts.DataItem[];
+                break;
+            }
     
             default:
                 if (fieldValue.fieldType) {
@@ -79,7 +92,7 @@ export class DataProcessor {
     
         return processed;
     }
-    
+
     processJssFields(fields: ts.JssFieldGroup): ts.DataFieldGroup {
         const fieldGroup = Object.entries(fields).reduce((fieldObj, [fieldName, fieldValue]) => {
             // skip over the "items" property, as it gets processed inside of processJssItem

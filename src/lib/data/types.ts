@@ -155,6 +155,11 @@ export interface JssDroplink {
     fields: JssFieldGroup;
 }
 
+export interface JssTreelist {
+    fieldType: string;
+    fields: JssFieldGroup;
+}
+
 export interface JssCheckbox {
     fieldType: string;
     value: string;
