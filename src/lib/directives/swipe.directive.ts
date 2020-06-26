@@ -1,3 +1,23 @@
+/*
+
+    Swipe Directive
+        - Provides an easy mechanism for detecting and reacting to swipe events.
+
+        [Example]
+
+            onSwipe(direction: string) {
+                if (direction === 'left') {
+                    console.log('the user swiped left');
+                } else {
+                    console.log('the user swiped right');
+                }
+            }
+
+            <!-- HTML -->
+            <div (swipe)="onSwipe($event)"></div>
+
+*/
+
 import { AfterViewInit, Directive, ElementRef, EventEmitter, OnDestroy, Output } from '@angular/core';
 
 @Directive({

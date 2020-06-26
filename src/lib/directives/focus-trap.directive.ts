@@ -1,3 +1,22 @@
+/*
+
+    Focus Trap Directive
+        - Traps the keyboard focus inside an element, for accessibility purposes.
+
+        [Example]
+
+            <!-- always enabled -->
+            <div [focusTrap]>
+                ...
+            </div>
+
+            <!-- only enabled if myVal is true -->
+            <div [focusTrap]="myVal">
+                ...
+            </div>
+
+*/
+
 import { Directive, ElementRef, Input, AfterViewInit, OnDestroy, OnChanges } from '@angular/core';
 
 @Directive({

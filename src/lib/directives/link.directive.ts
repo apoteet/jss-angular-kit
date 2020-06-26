@@ -1,3 +1,17 @@
+/*
+
+    Link Directive
+        - Helps avoid the issue where Angular routerLink breaks if passed an external URL.
+        - Pass in the JSS link data, or the "processed" (by SitecoreDataService) link data.
+        - The link href, alt, title, and text content will be automatically applied.
+        - A rel attribute with "noreferrer noopener" will be added if the link opens in a new tab.
+
+        [Example]
+
+            <a [appLink]="myLink"></a>
+
+*/
+
 import { Directive, ElementRef, HostListener, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as ts from '../data/types';
