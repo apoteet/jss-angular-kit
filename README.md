@@ -269,34 +269,9 @@ Note that the schematic makes a few assumptions about the structure of your proj
 
 <br>
 
-### Working with the Link Directive
+### Working with the Custom Directives
 
-The link directive encapsulates some of the complex logic that is required to work with Sitecore links and the Angular router, in tandem. Specifically it solves the following two problems for you:
-
-1) The Angular `[routerLink]` directive does not work with external URLs.
-2) The `href` property in the Sitecore link JSS data does not always contain the correct URL.
-
-**To use the link directive**, first import the XC Module into `app-component.module.ts`:
-
-```
-import { NgModule } from '@angular/core';
-import { XcModule } from '@xcentium/jss-angular-kit';
-
-@NgModule({
-    imports: [XcModule],
-
-    exports: [XcModule],
-})
-export class AppComponentsModule {}
-```
-
-**Next**, use `[appLink]` on any anchor element like so:
-
-```
-<a [appLink]="myLinkData">
-    Click Me!
-</a>
-```
+There are a handful of custom directives included in this package to help improve the DX when working on an Angular JSS app. Each one contains instructions and examples at the top of the file.
 
 <br>
 
