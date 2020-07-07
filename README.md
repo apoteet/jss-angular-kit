@@ -99,7 +99,11 @@ class MyComponent implements OnInit {
 }
 ```
 
-... note that you don't have to worry about removing your event listener, as the service will take care of that for you.
+... note that you don't have to worry about removing your event listener, as the service will take care of that for you. However if there is a case where you do need to manually remove an event listener, you can do so via the `off` method:
+
+```
+this.wes.off('resize', this.onResize);
+```
 
 <br>
 

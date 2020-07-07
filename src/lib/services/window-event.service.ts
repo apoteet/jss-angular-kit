@@ -18,6 +18,17 @@ export class WindowEventService implements OnDestroy {
         window.addEventListener(eventName, callback);
     }
 
+    off(eventName: string, callback: EventListener): void {
+        if (typeof window === 'undefined' || !this.eventHub[eventName]) return;
+
+        const eventIndex = this.eventHub[eventName].findIndex(cb => cb === callback);
+
+        if (eventIndex > -1) {
+            this.eventHub[eventName].splice(eventIndex, 1);
+            window.removeEventListener(eventName, callback);
+        }
+    }
+
     ngOnDestroy(): void {
         if (typeof window === 'undefined') return;
 
