@@ -24,6 +24,7 @@ export class LinkDirective implements OnInit, AfterViewInit {
 
     dataNew: ts.DataLink;
     isInternal = false;
+    isNewTab = false;
     elem: HTMLElement;
 
     constructor(
@@ -40,9 +41,8 @@ export class LinkDirective implements OnInit, AfterViewInit {
             this.dataNew = this.data;
         }
 
-        if (this.dataNew.linktype === 'internal') {
-            this.isInternal = true;
-        }
+        if (this.dataNew.linktype === 'internal') this.isInternal = true;
+        if (this.dataNew.target === '_blank') this.isNewTab = true;
 
         this.setAttributes();
         this.setText();
@@ -59,7 +59,7 @@ export class LinkDirective implements OnInit, AfterViewInit {
     }
 
     @HostListener('click', ['$event']) onMouseEnter(e: MouseEvent): void {
-        if (this.isInternal) {
+        if (this.isInternal && !this.isNewTab) {
             e.preventDefault();
             this.router.navigateByUrl(this.dataNew.href);
         }
