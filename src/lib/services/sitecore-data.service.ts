@@ -46,12 +46,17 @@ function findInJss(jssItems: ts.JssItem[], isMatch: Function, getValue?: Functio
     providedIn: 'root',
 })
 export class SitecoreDataService {
-    jssGraphQLService: any;
     dp: DataProcessor;
+    route: ts.JssRouteData; 
+    jssGraphQLService: any;
 
     init(options: any): void {
         this.jssGraphQLService = options.graphQLService;
         this.dp = new DataProcessor({ host: options.host });
+    }
+
+    storeRoute(route: ts.JssRouteData): void {
+        this.route = route;
     }
 
     fetch(guid: string): Observable<ts.DataItem> {
@@ -139,5 +144,24 @@ export class SitecoreDataService {
                 const item = findInJss(rendering.fields.items, (i: ts.JssItem) => i.name === itemName);
                 return findInJss([item], (i: ts.JssItem) => !!i.fields[fieldName], (i: ts.JssItem) => i.fields[fieldName]);
         }
+    }
+
+    // the identifier can be either the UID, component name, or datasource ID
+    getComponent(identifier: string): ts.JssComponentRendering {
+        if (!this.route) {
+            console.warn('[SDS] Unable to fetch the form data. No route data was detected.');
+            return;
+        }
+
+        const topLevelComponents = Object.values(this.route.placeholders)
+            .reduce((acc, curr) => {
+                return acc.concat(curr);
+            }, []);
+
+        return topLevelComponents.find((component) => {
+            return component.uid === identifier
+                || component.componentName === identifier
+                || component.dataSource.includes(identifier)
+        });
     }
 }

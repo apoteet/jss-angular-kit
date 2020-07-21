@@ -59,7 +59,7 @@ export interface JssComponentRendering {
     dataSource?: string;
     uid?: string;
     placeholders?: JssPlaceholdersData;
-    fields?: JssComponentFields;
+    fields?: JssComponentFields & JssForm;
     params?: JssComponentParams;
 }
 
@@ -162,6 +162,63 @@ export interface JssTreelist {
 
 export interface JssCheckbox {
     fieldType: string;
+    value: string;
+}
+
+export interface JssForm {
+    htmlPrefix: string;
+    formSessionId: JssFormFieldHtml;
+    formItemId: JssFormFieldHtml;
+    pageItemId: JssFormFieldHtml;
+    antiForgeryToken: JssFormFieldHtml;
+    metadata: JssFormMetadata;
+    fields: JssFormField[];
+}
+
+export interface JssFormMetadata {
+    isTrackingEnabled: boolean;
+    title: string;
+    cssClass: string;
+    itemId: string;
+}
+
+export interface JssFormField {
+    model: JssFormFieldModel;
+    fields?: JssFormField[];
+}
+
+export interface JssFormFieldModel {
+    itemId: string;
+    name: string;
+    templateId: string;
+    fieldTypeItemId: string;
+    cssClass: string;
+    placeholderText?: string;
+    minLength?: string;
+    maxLength?: string;
+    required?: boolean;
+    title?: string;
+    value?: string;
+    items: JssFormSelect[];
+    validationDataModels: JssFormFieldValidation[];
+}
+
+export interface JssFormFieldHtml {
+    name: string;
+    id: string;
+    value: string;
+}
+
+export interface JssFormFieldValidation {
+    itemId: string;
+    message: string;
+    name: string;
+}
+
+interface JssFormSelect {
+    itemId: string;
+    selected: boolean;
+    text: string;
     value: string;
 }
 
