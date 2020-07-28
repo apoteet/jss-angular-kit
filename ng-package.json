@@ -13,6 +13,7 @@
         "@angular/common",
         "@angular/compiler",
         "@angular/core",
+        "@angular/platform-browser",
         "@angular/router",
         "@schematics/angular",
         "chalk",

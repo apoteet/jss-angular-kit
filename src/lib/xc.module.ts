@@ -5,6 +5,7 @@ import { FocusTrapDirective } from './directives/focus-trap.directive';
 import { LinkDirective } from './directives/link.directive';
 import { ScrollToDirective } from './directives/scroll-to.directive';
 import { SwipeDirective } from './directives/swipe.directive';
+import { RawHtmlPipe } from './pipes/raw-html';
 
 @NgModule({
     imports: [RouterModule],
@@ -12,6 +13,7 @@ import { SwipeDirective } from './directives/swipe.directive';
     exports: [
         FocusTrapDirective,
         LinkDirective,
+        RawHtmlPipe,
         ScrollToDirective,
         SwipeDirective,
     ],
@@ -19,6 +21,7 @@ import { SwipeDirective } from './directives/swipe.directive';
     declarations: [
         FocusTrapDirective,
         LinkDirective,
+        RawHtmlPipe,
         ScrollToDirective,
         SwipeDirective,
     ],

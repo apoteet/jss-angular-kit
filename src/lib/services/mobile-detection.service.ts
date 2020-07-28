@@ -49,7 +49,7 @@ export class MobileDetectionService implements OnDestroy {
         this.wes.off('resize', this.onResize);
     }
 
-    init(onMobile: Function, onDesktop: Function, breakpoint: number): void {
+    init(onMobile: Function, onDesktop: Function, breakpoint?: number): void {
         if (typeof onMobile === 'function') this.mobileCallback = onMobile;
         if (typeof onDesktop === 'function') this.desktopCallback = onDesktop;
         
