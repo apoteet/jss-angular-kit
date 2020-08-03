@@ -194,9 +194,13 @@ export interface JssFormFieldModel {
     fieldTypeItemId: string;
     cssClass: string;
     placeholderText?: string;
+    min?: number|string;
     minLength?: string;
+    max?: number|string;
     maxLength?: string;
     required?: boolean;
+    rows?: boolean;
+    step?: number;
     title?: string;
     value?: string;
     items: JssFormSelect[];
