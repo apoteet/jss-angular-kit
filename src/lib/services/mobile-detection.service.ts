@@ -1,10 +1,10 @@
 /*
 
     Mobile Detection Service
-        - Register callback functions to fire for the mobile and desktop breakpoints.
-        - Each callback (e.g. either the "desktop" or "mobile") will be fired when the page is loaded, and again if and when the user resizes their screen past the specified breakpoint.
+        - Fires a callback function whenever the user switches between desktop and mobile.
+        - Note that the callback will be fired once when the page is first loaded.
 
-        [Example]
+        [EXAMPLES]
 
             import { MobileDetectionService } from '@/services/mobile-detection.service';
 
@@ -14,17 +14,23 @@
             })
             export class MyComponent {
                 constructor(private mds: MobileDetectionService) {
-                    this.mds.init(this.onMobile, this.onDesktop, 1199);
+                    this.mds.subscribe(onScreenChange);
                 }
 
-                onMobile(): void {
-                    ...
-                }
-
-                onDesktop(): void {
-                    ...
+                onScreenChange(isMobile): void {
+                    if (isMobile) {
+                        console.log('the screen size is below the mobile breakpoint');
+                    } else {
+                        console.log('the screen size is above the mobile breakpoint');
+                    }
                 }
             }
+
+
+        ... note that if you want to change the default breakpoint (1199px) you can do so by calling the setBreakpoint method BEFORE calling the subscribe method. For example:
+
+            this.mds.setBreakpoint(767);
+            this.mds.subscribe(onScreenChange);
 
 */
 
@@ -33,9 +39,8 @@ import { WindowEventService } from './window-event.service';
 
 @Injectable()
 export class MobileDetectionService implements OnDestroy {
+    callback: Function = function noop() { /**/ }
     mobileBreakpoint = 1199;
-    mobileCallback: Function = function noop() { /**/ }
-    desktopCallback: Function = function noop() { /**/ }
     resizeTimeoutId = 0;
 
     constructor(private wes: WindowEventService) {
@@ -49,11 +54,12 @@ export class MobileDetectionService implements OnDestroy {
         this.wes.off('resize', this.onResize);
     }
 
-    init(onMobile: Function, onDesktop: Function, breakpoint?: number): void {
-        if (typeof onMobile === 'function') this.mobileCallback = onMobile;
-        if (typeof onDesktop === 'function') this.desktopCallback = onDesktop;
-        
-        this.mobileBreakpoint = breakpoint || this.mobileBreakpoint;
+    setBreakpoint(pixels: number): void {
+        this.mobileBreakpoint = pixels;
+    }
+
+    subscribe(callback: Function): void {
+        this.callback = callback;
 
         if (typeof window !== 'undefined') this.detectMobile();
     }
@@ -61,11 +67,7 @@ export class MobileDetectionService implements OnDestroy {
     detectMobile = (): void => {
         const isMobile = window.innerWidth <= this.mobileBreakpoint;
 
-        if (isMobile) {
-            this.mobileCallback();
-        } else {
-            this.desktopCallback();
-        }
+        this.callback(isMobile);
     }
 
     onResize = (): void => {
