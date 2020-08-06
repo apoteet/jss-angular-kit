@@ -261,6 +261,7 @@ export interface DataFieldGroupB {
 }
 
 export type DataField = string
+    | boolean
     | DataImage
     | DataLink
     | DataItem[]
