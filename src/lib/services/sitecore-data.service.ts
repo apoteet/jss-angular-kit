@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 
 import { DataProcessor } from '../data/data-processor';
@@ -46,8 +46,11 @@ function findInJss(jssItems: ts.JssItem[], isMatch: Function, getValue?: Functio
     providedIn: 'root',
 })
 export class SitecoreDataService {
+    public data = new BehaviorSubject<ts.JssRouteData>(null);
+
+    _data: ts.JssRouteData;
     dp: DataProcessor;
-    route: ts.JssRouteData; 
+    route: ts.JssRouteData;
     jssGraphQLService: any;
 
     init(options: any): void {
@@ -55,8 +58,9 @@ export class SitecoreDataService {
         this.dp = new DataProcessor({ host: options.host });
     }
 
-    storeRoute(route: ts.JssRouteData): void {
-        this.route = route;
+    setData(route: ts.JssRouteData): void {
+        this._data = route;
+        this.data.next(route);
     }
 
     fetch(guid: string): Observable<ts.DataItem> {
@@ -148,12 +152,12 @@ export class SitecoreDataService {
 
     // the identifier can be either the UID, component name, or datasource ID
     getComponent(identifier: string): ts.JssComponentRendering {
-        if (!this.route) {
+        if (!this._data) {
             console.warn('[SDS] Unable to fetch the form data. No route data was detected.');
             return;
         }
 
-        const topLevelComponents = Object.values(this.route.placeholders)
+        const topLevelComponents = Object.values(this._data.placeholders)
             .reduce((acc, curr) => {
                 return acc.concat(curr);
             }, []);
