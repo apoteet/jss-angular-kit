@@ -39,7 +39,7 @@ export class DataProcessor {
                 processed = (fieldValue as ts.JssDroplist).value;
                 break;
 
-            case 'DropTree':
+            case 'Droptree':
                 processed = this.processJssField(Object.values((fieldValue as ts.JssDroptree).fields)[0]);
                 break;
 
