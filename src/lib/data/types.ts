@@ -91,11 +91,13 @@ export interface JssFieldGroupB {
 
 export type JssField = JssFieldGeneric
     & JssText
+    & JssInteger
     & JssImage
     & JssLink
     & JssCheckbox
-    & JssDroplist
     & JssDroplink
+    & JssDroplist
+    & JssDroptree
 
 export interface JssFieldGeneric<T = JssGenericFieldValue> {
     value: T;
@@ -116,6 +118,11 @@ export interface JssPlaceholderData {
 }
 
 export interface JssText {
+    fieldType: string;
+    value: string;
+}
+
+export interface JssInteger {
     fieldType: string;
     value: string;
 }
@@ -144,12 +151,20 @@ export interface JssLink {
     };
 }
 
+export interface JssDroplink {
+    fieldType: string;
+    id: string;
+    url: string;
+    fields: JssFieldGroup;
+}
+
 export interface JssDroplist {
     fieldType: string;
     value: string;
 }
 
-export interface JssDroplink {
+export interface JssDroptree {
+    fieldType: string;
     id: string;
     url: string;
     fields: JssFieldGroup;

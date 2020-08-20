@@ -39,6 +39,10 @@ export class DataProcessor {
                 processed = (fieldValue as ts.JssDroplist).value;
                 break;
 
+            case 'DropTree':
+                processed = this.processJssField(Object.values((fieldValue as ts.JssDroptree).fields)[0]);
+                break;
+
             case 'General Link':
                 processed = {
                     href: (fieldValue as ts.JssLink).value.href,
@@ -59,6 +63,10 @@ export class DataProcessor {
                     width: (fieldValue as ts.JssImage).value.width,
                     height: (fieldValue as ts.JssImage).value.height,
                 };
+                break;
+
+            case 'Integer':
+                processed = processed = (fieldValue as ts.JssInteger).value;
                 break;
 
             case 'Multi-Line Text':
