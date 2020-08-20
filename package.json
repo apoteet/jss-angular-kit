@@ -1,6 +1,6 @@
 {
     "name": "@xcentium/jss-angular-kit",
-    "version": "1.15.1",
+    "version": "1.15.2",
     "description": "A collection of helper classes and types for working with Sitecore JSS on an Angular project.",
     "homepage": "https://github.com/XCentium/jss-angular-kit",
     "repository": "https://github.com/XCentium/jss-angular-kit",
