@@ -40,17 +40,13 @@ export declare type JssPlaceholdersData<TYPEDNAME extends string = string> = {
     [P in TYPEDNAME]: Array<JssComponentRendering & JssHtmlElementRendering>;
 };
 
-export type JssComponentFields = JssComponentFieldsA & JssComponentFieldsB & JssComponentFieldsC;
+export type JssComponentFields = JssComponentFieldsA & JssComponentFieldsB;
 
 export interface JssComponentFieldsA {
     [name: string]: JssField;
 }
 
 export interface JssComponentFieldsB {
-    [name: string]: JssField[];
-}
-
-export interface JssComponentFieldsC {
     items: JssItem[];
 }
 
@@ -83,17 +79,13 @@ export declare type JssGenericFieldValue = string | boolean | number | {
     [key: string]: any;
 }>;
 
-export type JssFieldGroup = JssFieldGroupA & JssFieldGroupB & JssFieldGroupC;
+export type JssFieldGroup = JssFieldGroupA & JssFieldGroupB;
 
 export interface JssFieldGroupA {
     [k: string]: JssField;
 }
 
 export interface JssFieldGroupB {
-    [k: string]: JssField[];
-}
-
-export interface JssFieldGroupC {
     items: JssItem[];
 }
 
@@ -106,7 +98,6 @@ export type JssField = JssFieldGeneric
     & JssDroplink
     & JssDroplist
     & JssDroptree
-    & JssMultilistSearch
 
 export interface JssFieldGeneric<T = JssGenericFieldValue> {
     value: T;
@@ -176,12 +167,6 @@ export interface JssDroptree {
     fieldType: string;
     id: string;
     url: string;
-    fields: JssFieldGroup;
-}
-
-export interface JssMultilistSearch {
-    fieldType: string;
-    id: string;    
     fields: JssFieldGroup;
 }
 

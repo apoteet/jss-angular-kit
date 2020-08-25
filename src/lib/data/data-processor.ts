@@ -74,7 +74,7 @@ export class DataProcessor {
                 break;
 
             case 'Multilist with Search':
-                processed = this.processJssField(Object.values(fieldValue as ts.JssMultilistSearch)[0].fields);
+                processed = fieldValue[0].fields.Value.value;
                 break;
 
             case 'Rich Text':
