@@ -97,7 +97,7 @@ export type JssField = JssFieldGeneric
     & JssCheckbox
     & JssDroplink
     & JssDroplist
-    & JssMultilistSearch
+    & JssDroptree
 
 export interface JssFieldGeneric<T = JssGenericFieldValue> {
     value: T;
@@ -172,12 +172,6 @@ export interface JssDroptree {
 
 export interface JssTreelist {
     fieldType: string;
-    fields: JssFieldGroup;
-}
-
-export interface JssMultilistSearch {
-    fieldType: string;
-    id: string;    
     fields: JssFieldGroup;
 }
 
