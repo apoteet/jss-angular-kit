@@ -65,52 +65,67 @@ function generateComponentFactory(newComponent) {
     const lazyRegistrations = [];
     const declarations = [];
 
+    function loadComponentsFromFolder(componentRootPath, ...folders) {
+        const uppermostFolder = folders[folders.length - 1];
+
+        const componentFilePath = path.join.apply(this, [componentRootPath, ...folders, `${ uppermostFolder }.component.ts`]);
+
+        if (!fs.existsSync(componentFilePath)) {
+            return;
+        }
+        
+        const componentFileContents = fs.readFileSync(componentFilePath, 'utf8');
+
+        // ASSUMPTION: your component should export a class directly that follows Angular conventions,
+        // i.e. `export class FooComponent` - so we can detect the component's name for auto registration.
+        const componentClassMatch = /export class (.+)Component/g.exec(componentFileContents);
+
+        if (componentClassMatch === null) {
+            console.debug(
+                `Component ${ componentFilePath } did not seem to export a component class. It will be skipped.`,
+            );
+            return;
+        }
+
+        const componentName = componentClassMatch[1];
+        const importVarName = `${ componentName }Component`;
+
+        // check for lazy loading needs
+        const moduleFilePath = path.join.apply(this, [componentRootPath, ...folders, `${ uppermostFolder }.module.ts`]);
+        const isLazyLoaded = fs.existsSync(moduleFilePath);
+
+        if (isLazyLoaded) {
+            console.debug(`Registering JSS component (lazy) ${ componentName }`);
+            lazyRegistrations.push(
+                `{ path: '${ componentName }', loadChildren: () => import('./${ folders.join('/') }/${ uppermostFolder }.module').then(m => m.${ componentName }Module) },`,
+            );
+        } else {
+            console.debug(`Registering JSS component ${ componentName }`);
+            imports.push(`import { ${ importVarName } } from './${ folders.join('/') }/${ uppermostFolder }.component';`);
+            registrations.push(`{ name: '${ componentName }', type: ${ importVarName } },`);
+            declarations.push(`${ importVarName },`);
+        }
+    }
+
+    // currently we'll search for and load components that are nested up to three levels deep
+    // ... if you require further nesting, update the code below
     fs.readdirSync(componentRootPath).forEach((componentFolder) => {
-        const subfolderPath = path.join(componentRootPath, componentFolder);
+        if (componentFolder.includes('.')) return;
+        
+        const folderPath = path.join(componentRootPath, componentFolder);
+        loadComponentsFromFolder(componentRootPath, componentFolder);
 
-        if (componentFolder.endsWith('.ts') || componentFolder === '.gitignore') return;
+        fs.readdirSync(folderPath).forEach((folder) => {
+            if (folder.includes('.')) return;
 
-        fs.readdirSync(subfolderPath).forEach((subfolder) => {
-            // ignore ts files in component root folder
-            if (subfolder.endsWith('.ts') || subfolder === '.gitignore') return;
+            const subfolderPath = path.join(componentRootPath, componentFolder, folder);
+            loadComponentsFromFolder(componentRootPath, componentFolder, folder);
 
-            const componentFilePath = path.join(subfolderPath, subfolder, `${ subfolder }.component.ts`);
+            fs.readdirSync(subfolderPath).forEach((subfolder) => {
+                if (subfolder.includes('.')) return;
 
-            if (!fs.existsSync(componentFilePath)) {
-                return;
-            }
-            
-            const componentFileContents = fs.readFileSync(componentFilePath, 'utf8');
-
-            // ASSUMPTION: your component should export a class directly that follows Angular conventions,
-            // i.e. `export class FooComponent` - so we can detect the component's name for auto registration.
-            const componentClassMatch = /export class (.+)Component/g.exec(componentFileContents);
-
-            if (componentClassMatch === null) {
-                console.debug(
-                    `Component ${ componentFilePath } did not seem to export a component class. It will be skipped.`,
-                );
-                return;
-            }
-
-            const componentName = componentClassMatch[1];
-            const importVarName = `${ componentName }Component`;
-
-            // check for lazy loading needs
-            const moduleFilePath = path.join(subfolderPath, `${ subfolder }.module.ts`);
-            const isLazyLoaded = fs.existsSync(moduleFilePath);
-
-            if (isLazyLoaded) {
-                console.debug(`Registering JSS component (lazy) ${ componentName }`);
-                lazyRegistrations.push(
-                    `{ path: '${ componentName }', loadChildren: () => import('./${ componentFolder }/${ subfolder }/${ subfolder }.module').then(m => m.${ componentName }Module) },`,
-                );
-            } else {
-                console.debug(`Registering JSS component ${ componentName }`);
-                imports.push(`import { ${ importVarName } } from './${ componentFolder }/${ subfolder }/${ subfolder }.component';`);
-                registrations.push(`{ name: '${ componentName }', type: ${ importVarName } },`);
-                declarations.push(`${ importVarName },`);
-            }
+                loadComponentsFromFolder(componentRootPath, componentFolder, folder, subfolder);
+            });
         });
     });
 
@@ -126,7 +141,7 @@ function generateComponentFactory(newComponent) {
     registrations.sort(registrationsSort);
     declarations.sort(declarationsSort);
 
-    return `// Do not edit this file, it is auto-generated at build time!
+    return `// Do not edit this file, it is auto-generated during the "npm run scaffold" command!
 // tslint:disable
 
 import { NgModule } from '@angular/core';
