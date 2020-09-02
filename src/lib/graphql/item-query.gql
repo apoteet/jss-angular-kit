@@ -3,7 +3,7 @@ query ItemQuery($path: String!) {
         id
         name
 
-        fields(ownFields: true) {
+        fields {
             name
             value
             rendered
@@ -13,7 +13,7 @@ query ItemQuery($path: String!) {
             id
             name
 
-            fields(ownFields: true) {
+            fields {
                 name
                 value
                 rendered

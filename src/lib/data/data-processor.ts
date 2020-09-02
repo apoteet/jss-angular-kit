@@ -173,6 +173,9 @@ export class DataProcessor {
     
         processedItem.fields = item.fields.reduce((fieldObj, field) => {
             let keyValPair = null;
+
+            // skip the system-generated Sitecore fields
+            if (field.name.startsWith('__')) return fieldObj;
     
             switch (field.__typename) {
                 case 'TextField':
