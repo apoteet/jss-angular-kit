@@ -9,7 +9,7 @@ interface Options {
     host: string;
 }
 
-const attrRegex = (attrName: string): RegExp => new RegExp(`${ attrName }="([^ ]*)`);
+const attrRegex = (attrName: string): RegExp => new RegExp(`${ attrName }=\\"([^ ]*)\\"`);
 let host = '/';
 
 export class DataProcessor {
