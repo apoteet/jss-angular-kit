@@ -90,15 +90,16 @@ export interface JssFieldGroupB {
 }
 
 export type JssField = JssFieldGeneric
-    & JssText
-    & JssInteger
-    & JssImage
-    & JssLink
     & JssCheckbox
     & JssDroplink
     & JssDroplist
     & JssDroptree
+    & JssImage
+    & JssInteger
+    & JssLink
     & JssMultilistSearch
+    & JssNumber
+    & JssText
 
 export interface JssFieldGeneric<T = JssGenericFieldValue> {
     value: T;
@@ -119,6 +120,11 @@ export interface JssPlaceholderData {
 }
 
 export interface JssText {
+    fieldType: string;
+    value: string;
+}
+
+export interface JssNumber {
     fieldType: string;
     value: string;
 }

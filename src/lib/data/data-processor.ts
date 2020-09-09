@@ -97,6 +97,8 @@ export class DataProcessor {
                 }, {} as ts.DataFieldGroup);
                 break;
 
+            case 'Number':
+                processed = (fieldValue as ts.JssNumber).value;
                 break;
 
             case 'Rich Text':
