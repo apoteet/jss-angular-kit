@@ -17,14 +17,16 @@ export class DataProcessor {
         host = options.host;
     }
     
-    processJssField(fieldValue: ts.JssField): ts.DataField | null {
-        let processed: ts.DataField = null;
+    processJssField(fieldValue: ts.JssField | ts.JssField[]): ts.DataField | ts.DataField[] | ts.DataFieldGroup | null {
+        let processed: ts.DataField | ts.DataFieldGroup = null;
 
         if (!fieldValue) return processed;
 
-        const fieldType = Array.isArray(fieldValue) && fieldValue.length
-            ? fieldValue[0].fieldType
-            : fieldValue.fieldType;
+        if (Array.isArray(fieldValue)) {
+            return fieldValue.map((fieldValueItem) => this.processJssField(fieldValueItem)) as ts.DataField[];
+        }
+
+        const fieldType = fieldValue.fieldType
 
         switch (fieldType) {    
             case 'Checkbox':
@@ -32,7 +34,13 @@ export class DataProcessor {
                 break;
 
             case 'Droplink':
-                processed = this.processJssField(Object.values((fieldValue as ts.JssDroplink).fields)[0]);
+                processed = Object.entries((fieldValue as ts.JssDroplink).fields).reduce((acc, curr) => {
+                    const [fieldName, fieldVal] = curr;
+
+                    acc[fieldName] = this.processJssField(fieldVal) as ts.DataField;
+
+                    return acc;
+                }, {} as ts.DataFieldGroup);
                 break;
     
             case 'Droplist':
@@ -40,7 +48,13 @@ export class DataProcessor {
                 break;
 
             case 'Droptree':
-                processed = this.processJssField(Object.values((fieldValue as ts.JssDroptree).fields)[0]);
+                processed = Object.entries((fieldValue as ts.JssDroptree).fields).reduce((acc, curr) => {
+                    const [fieldName, fieldVal] = curr;
+
+                    acc[fieldName] = this.processJssField(fieldVal) as ts.DataField;
+
+                    return acc;
+                }, {} as ts.DataFieldGroup);
                 break;
 
             case 'General Link':
@@ -66,7 +80,7 @@ export class DataProcessor {
                 break;
 
             case 'Integer':
-                processed = processed = (fieldValue as ts.JssInteger).value;
+                processed = (fieldValue as ts.JssInteger).value;
                 break;
 
             case 'Multi-Line Text':
@@ -74,7 +88,15 @@ export class DataProcessor {
                 break;
 
             case 'Multilist with Search':
-                processed = fieldValue[0].fields.Value.value;
+                processed = Object.entries((fieldValue as ts.JssMultilistSearch).fields).reduce((acc, curr) => {
+                    const [fieldName, fieldVal] = curr;
+
+                    acc[fieldName] = this.processJssField(fieldVal) as ts.DataField;
+
+                    return acc;
+                }, {} as ts.DataFieldGroup);
+                break;
+
                 break;
 
             case 'Rich Text':
@@ -86,12 +108,18 @@ export class DataProcessor {
                 break;
 
             case 'Treelist': 
-                processed = (fieldValue as unknown as ts.JssItem[]).map((item) => this.processJssField(Object.values((item as ts.JssItem).fields)[0]));
+                processed = Object.entries((fieldValue as ts.JssTreeList).fields).reduce((acc, curr) => {
+                    const [fieldName, fieldVal] = curr;
+
+                    acc[fieldName] = this.processJssField(fieldVal) as ts.DataField;
+
+                    return acc;
+                }, {} as ts.DataFieldGroup);
                 break;
     
             default:
-                if (fieldValue.fieldType) {
-                    console.warn(`[Data Processor] Unable to process the JSS field. The type "${ fieldValue.fieldType }" is not recognized.`);
+                if ((fieldValue as ts.JssField).fieldType) {
+                    console.warn(`[Data Processor] Unable to process the JSS field. The type "${ (fieldValue as ts.JssField).fieldType }" is not recognized.`);
                 }
         }
     

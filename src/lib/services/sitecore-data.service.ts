@@ -25,6 +25,8 @@ const ItemQuery = require('graphql-tag/loader!./item-query.gql');
 function findInJss(jssItems: ts.JssItem[], isMatch: Function): ts.JssItem | null;
 function findInJss(jssItems: ts.JssItem[], isMatch: Function, getValue: Function): ts.JssField | null;
 function findInJss(jssItems: ts.JssItem[], isMatch: Function, getValue?: Function): any {
+    if (!jssItems) return null;
+
     const itemQueue = [...jssItems];
 
     while (itemQueue.length) {
@@ -83,7 +85,7 @@ export class SitecoreDataService {
 
     get(rendering: ts.JssComponentRendering): ts.DataComponent;
     get(rendering: ts.JssComponentRendering, itemName: string): ts.DataItem | null;
-    get(rendering: ts.JssComponentRendering, itemName: string | null, fieldName: string): ts.DataField | null;
+    get(rendering: ts.JssComponentRendering, itemName: string | null, fieldName: string): ts.DataField | ts.DataFieldGroup | null;
     get(rendering: ts.JssComponentRendering, itemName?: string, fieldName?: string): any {
 
         switch (true) {
