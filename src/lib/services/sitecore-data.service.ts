@@ -48,11 +48,10 @@ function findInJss(jssItems: ts.JssItem[], isMatch: Function, getValue?: Functio
     providedIn: 'root',
 })
 export class SitecoreDataService {
-    public data = new BehaviorSubject<ts.JssRouteData>(null);
+    public data = new BehaviorSubject<ts.JssLayoutServiceData>(null);
 
-    _data: ts.JssRouteData;
+    _data: ts.JssLayoutServiceData;
     dp: DataProcessor;
-    route: ts.JssRouteData;
     jssGraphQLService: any;
 
     init(options: any): void {
@@ -60,9 +59,9 @@ export class SitecoreDataService {
         this.dp = new DataProcessor({ host: options.host });
     }
 
-    setData(route: ts.JssRouteData): void {
-        this._data = route;
-        this.data.next(route);
+    setData(layoutServiceData: ts.JssLayoutServiceData): void {
+        this._data = layoutServiceData;
+        this.data.next(layoutServiceData);
     }
 
     fetch(guid: string): Observable<ts.DataItem> {
@@ -155,11 +154,11 @@ export class SitecoreDataService {
     // the identifier can be either the UID, component name, or datasource ID
     getComponent(identifier: string): ts.JssComponentRendering {
         if (!this._data) {
-            console.warn('[SDS] Unable to fetch the form data. No route data was detected.');
+            console.warn('[SDS] Unable to fetch the form data. No layout service data is present.');
             return;
         }
 
-        const topLevelComponents = Object.values(this._data.placeholders)
+        const topLevelComponents = Object.values(this._data.sitecore.route.placeholders)
             .reduce((acc, curr) => {
                 return acc.concat(curr);
             }, []);
