@@ -1,3 +1,14 @@
+/*
+
+    Scroll-To Directive
+        - Provides an easy way to "smooth" scroll to an element, if the browser supports it. Pass in a CSS selector for the element you want to scroll towards.
+
+        [Example]
+
+            <button type="button" scrollTo="#overview">Scroll to Overview
+
+*/
+
 import { AfterViewInit, Directive, ElementRef, Input, OnDestroy } from '@angular/core';
 
 @Directive({
