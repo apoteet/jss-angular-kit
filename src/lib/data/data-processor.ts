@@ -156,7 +156,7 @@ export class DataProcessor {
         }
     
         if (item.fields) {
-            processedItem.fields = this.processJssFields(item.fields);
+            processedItem.fields = this.processJssFields(item.fields as ts.JssFieldGroup);
         }
     
         return processedItem;
