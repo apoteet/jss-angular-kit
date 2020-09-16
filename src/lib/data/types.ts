@@ -177,10 +177,10 @@ export interface JssDroptree {
     fields: JssFieldGroup;
 }
 
-export interface JssMultilistSearch {
+export interface JssMultilistSearch<T = JssFieldGroup> {
     fieldType: string;
     id: string;
-    fields: JssFieldGroup;
+    fields: T;
 }
 
 export interface JssTreeList {
