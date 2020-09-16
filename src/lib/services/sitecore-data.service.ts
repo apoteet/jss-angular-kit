@@ -152,21 +152,39 @@ export class SitecoreDataService {
     }
 
     // the identifier can be either the UID, component name, or datasource ID
-    getComponent(identifier: string): ts.JssComponentRendering {
+    getComponent(identifier: string): ts.JssComponentRendering | null {
         if (!this._data) {
             console.warn('[SDS] Unable to fetch the form data. No layout service data is present.');
             return;
+        }        
+
+        let foundComponent = null;
+        const queue = [];
+
+        function addToQueue(placeholders) {
+            if (!placeholders) return;
+
+            Object.values(placeholders)
+                .flatMap((componentArray) => componentArray)
+                .forEach((component) => queue.push(component));
         }
 
-        const topLevelComponents = Object.values(this._data.sitecore.route.placeholders)
-            .reduce((acc, curr) => {
-                return acc.concat(curr);
-            }, []);
+        addToQueue(this._data.sitecore.route.placeholders);
 
-        return topLevelComponents.find((component) => {
-            return component.uid === identifier
-                || component.componentName === identifier
-                || component.dataSource.includes(identifier)
-        });
+        while (!foundComponent && queue.length) {
+            const currentComponent = queue.shift();
+
+            const isMatchingComponent = currentComponent.uid === identifier
+                || currentComponent.componentName === identifier
+                || currentComponent.dataSource.includes(identifier)
+
+            if (isMatchingComponent) {
+                foundComponent = currentComponent;
+            } else {
+                addToQueue(currentComponent.placeholders);
+            }
+        }
+
+        return foundComponent;
     }
 }
