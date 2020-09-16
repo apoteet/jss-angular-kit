@@ -152,12 +152,14 @@ export class SitecoreDataService {
     }
 
     // the identifier can be either the UID, component name, or datasource ID
-    getComponent(identifier: string): ts.JssComponentRendering | null {
+    // you can (optionally) pass in a layout service data object, otherwise, the one from the current route will be used
+    getComponent(identifier: string, dataObject?: ts.JssLayoutServiceData): ts.JssComponentRendering | null {
         if (!this._data) {
             console.warn('[SDS] Unable to fetch the form data. No layout service data is present.');
             return;
         }        
 
+        const data = dataObject || this._data;
         let foundComponent = null;
         const queue = [];
 
@@ -169,7 +171,7 @@ export class SitecoreDataService {
                 .forEach((component) => queue.push(component));
         }
 
-        addToQueue(this._data.sitecore.route.placeholders);
+        addToQueue(data.sitecore.route.placeholders);
 
         while (!foundComponent && queue.length) {
             const currentComponent = queue.shift();
