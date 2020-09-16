@@ -178,7 +178,7 @@ export interface JssDroptree {
     fieldType: string;
     id: string;
     url: string;
-    fields: JssFieldGroup | JssField[];
+    fields: JssFieldGroup;
 }
 
 export interface JssMultilistSearch<T = JssFieldGroup> {
