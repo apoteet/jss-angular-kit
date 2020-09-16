@@ -79,13 +79,17 @@ export declare type JssGenericFieldValue = string | boolean | number | {
     [key: string]: any;
 }>;
 
-export type JssFieldGroup = JssFieldGroupA & JssFieldGroupB;
+export type JssFieldGroup = JssFieldGroupA & JssFieldGroupB & JssFieldGroupC;
 
 export interface JssFieldGroupA {
     [k: string]: JssField;
 }
 
 export interface JssFieldGroupB {
+    [k: string]: JssField[];
+}
+
+export interface JssFieldGroupC {
     items: JssItem[];
 }
 
@@ -174,7 +178,7 @@ export interface JssDroptree {
     fieldType: string;
     id: string;
     url: string;
-    fields: JssFieldGroup;
+    fields: JssFieldGroup | JssField[];
 }
 
 export interface JssMultilistSearch<T = JssFieldGroup> {
