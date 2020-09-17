@@ -352,17 +352,3 @@ export interface DataLink {
     title?: string;
     querystring?: string;
 }
-
-
-// * directive data types
-export interface ScrollOptions {
-    /**
-     * A CSS selector string for the element you want to scroll towards.
-     */
-    target?: string;
-
-    /**
-     * Optional. An offset (in pixels) that should be applied to the target scroll coordinate.
-     */
-    offset?: number;
-}
