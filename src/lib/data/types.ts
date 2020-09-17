@@ -251,7 +251,7 @@ export interface JssFormFieldValidation {
     name: string;
 }
 
-interface JssFormSelect {
+export interface JssFormSelect {
     itemId: string;
     selected: boolean;
     text: string;
